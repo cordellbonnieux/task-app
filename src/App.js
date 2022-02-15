@@ -1,18 +1,23 @@
-import { Component } from 'react/cjs/react.production.min';
-import Overview from './components/Overview';
+import React, { Component } from 'react'
+import uniqid from 'uniqid'
+import Overview from './components/Overview'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        task: { text: ''},
-        tasks: []
+        task: { 
+          text: '',
+          id: uniqid()
+        },
+        tasks: [],
     }
   }
   handleChange = (e) => {
     this.setState({
       task: {
         text: e.target.value,
+        id: this.state.task.id,
       }
     })
   }
@@ -20,11 +25,15 @@ class App extends Component {
     e.preventDefault();
     this.setState({
       tasks: this.state.tasks.concat(this.state.task),
-      task: { text: '' },
+      task: {
+        text: '',
+        id: uniqid() 
+      },
     })
   }
   render() {
-    const { task, tasks } = this.state;
+    const { task, tasks } = this.state
+
     return (
       <div>
         <h1>
@@ -34,26 +43,24 @@ class App extends Component {
             Type in a task, then click the button to add it to the list.
         </p>
         <form onSubmit={this.onSubmitTask}>
+
             <input 
               onChange={this.handleChange}
               value={task.text}
               type='text' 
               id="taskInput"
             />
-            <input 
-              type='submit'
-              value="Add Task"
-            />
+            <button type='submit'>
+              Add Task
+            </button>
         </form>
         <p>
           Tasks:
         </p>
-        <ul>
-
-        </ul>
+          <Overview tasks={tasks} />
       </ div>
     )
   }
 }
 
-export default App;
+export default App
